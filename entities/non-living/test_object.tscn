@@ -4,10 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://bsg844tqtcif7" path="res://circle.png" id="2_xrin1"]
 [ext_resource type="Texture2D" uid="uid://c7p5de7go44u1" path="res://icon.svg" id="3_vnqi8"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ia1lp"]
-size = Vector2(38, 34)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dvq88"]
+size = Vector2(32, 32)
 
-[node name="test_object" type="Area2D"]
+[node name="test_object" type="Area2D" groups=["Entity", "can_attack"]]
 y_sort_enabled = true
 linear_damp = 5.0
 angular_damp = 5.0
@@ -15,15 +15,14 @@ script = ExtResource("1_dvq88")
 
 [node name="Shadow" type="Sprite2D" parent="."]
 z_index = -1
-position = Vector2(-1.90735e-06, -3.8147e-06)
-scale = Vector2(0.59375, 0.53125)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_xrin1")
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_ia1lp")
+shape = SubResource("RectangleShape2D_dvq88")
 
 [node name="Sprite2D" type="Sprite2D" parent="CollisionBox"]
-scale = Vector2(0.3, 0.269)
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("3_vnqi8")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

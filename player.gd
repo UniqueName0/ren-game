@@ -6,6 +6,8 @@ extends CharacterBody2D
 @export var blast_stop_threshold := 100
 @export var max_stretch := 50
 @export var stretch_speed := 50
+@export var throw_force := 300
+@export var throw_height := 400
 
 enum State { IDLE, STRETCHING, BLASTING }
 var current_state := State.IDLE
@@ -13,10 +15,12 @@ var stretch_amount := 0.0
 var previous_offset := Vector2.ZERO
 var last_direction := Vector2.RIGHT
 var is_attacking
+var team = 1
 
 func _physics_process(delta: float):
 	var direction := Input.get_vector("left", "right", "up", "down")
 	var stretch_pressed := Input.is_action_pressed("stretch")
+	var throw_pressed := Input.is_action_pressed("throw")
 	var stretch_change := 0.0
 	
 	if not direction.is_zero_approx():
@@ -31,6 +35,12 @@ func _physics_process(delta: float):
 				current_state = State.STRETCHING
 				velocity = Vector2.ZERO
 				stretch_change = delta * stretch_speed
+			if throw_pressed and $CarriedItemsContainer.get_child_count() > 0:
+				var item = $CarriedItemsContainer.get_child(0)
+				item.reparent(get_tree().root, false)
+				item.global_position = $CarriedItemsContainer.global_position
+				item.z_index = 0
+				item.throw(last_direction * throw_force, throw_height, self)
 			is_attacking = false
 		State.STRETCHING:
 			if stretch_pressed:
@@ -51,11 +61,11 @@ func _physics_process(delta: float):
 	stretch_amount = clampf(stretch_amount + stretch_change, 0, max_stretch)
 	
 	var current_offset := last_direction * stretch_amount * 0.02
-	scale.x = 1 + stretch_amount * 0.04
-	scale.y = 1
+	$CollisionBox.scale.x = 1 + stretch_amount * 0.04
+	$CollisionBox.scale.y = 1
 	
 	if max_stretch - stretch_amount > 0:
-		position += last_direction * (scale.x * scale.x / 2) * delta
+		position += last_direction * ($CollisionBox.scale.x * $CollisionBox.scale.x / 2) * delta
 	
 	if current_state == State.STRETCHING:
 		rotation = last_direction.angle()
@@ -71,3 +81,7 @@ func _physics_process(delta: float):
 			if collider and collider.has_method("attacked"): collider.attack_by(self)
 	
 	previous_offset = current_offset 
+
+func _on_entity_detection_area_area_entered(area: Area2D) -> void:
+	if area.is_in_group("Entity") and current_state == State.BLASTING:
+		area.attacked_by(self)
