@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c7p5de7go44u1" path="res://icon.svg" id="3_vnqi8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dvq88"]
-size = Vector2(32, 32)
+size = Vector2(38, 38)
 
 [node name="test_object" type="Area2D" groups=["Entity", "can_attack"]]
 y_sort_enabled = true
@@ -15,14 +15,14 @@ script = ExtResource("1_dvq88")
 
 [node name="Shadow" type="Sprite2D" parent="."]
 z_index = -1
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.6, 0.6)
 texture = ExtResource("2_xrin1")
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_dvq88")
 
 [node name="Sprite2D" type="Sprite2D" parent="CollisionBox"]
-scale = Vector2(0.25, 0.25)
+scale = Vector2(0.3, 0.3)
 texture = ExtResource("3_vnqi8")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

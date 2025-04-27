@@ -4,13 +4,15 @@ extends Area2D
 @export var ThrowForceDividend = 3
 
 var velocity := Vector2.ZERO
-var z_velocity := 0
-var z_position := 0
+var z_velocity := 0.0
+var z_position := 0.0
 var team := 0 # 0 = neutral
+
+var gravity_force = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 
 func _physics_process(delta):
-	z_velocity += gravity * delta
+	z_velocity += gravity_force * delta
 	z_position -= z_velocity * delta
 	
 	if z_position <= 0:
@@ -41,4 +43,3 @@ func _on_body_entered(body: Node2D) -> void:
 		z_position = 0
 		velocity = Vector2.ZERO
 		z_index=2
-	
