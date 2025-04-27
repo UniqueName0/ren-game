@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://4pyjl6kdauhp"]
+
+[ext_resource type="Script" uid="uid://cithjiy3kulp" path="res://player.gd" id="1_c1x3l"]
+[ext_resource type="Texture2D" uid="uid://c7p5de7go44u1" path="res://icon.svg" id="2_kb0hi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sasra"]
+size = Vector2(128, 126)
+
+[node name="Player" type="CharacterBody2D" groups=["can_attack"]]
+y_sort_enabled = true
+script = ExtResource("1_c1x3l")
+Speed = 150
+
+[node name="CollisionBox" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
+scale = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_sasra")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_kb0hi")

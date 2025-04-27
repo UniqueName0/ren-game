@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://62wgt0bpd3ph"]
+
+[ext_resource type="PackedScene" uid="uid://4pyjl6kdauhp" path="res://entities/living/player.tscn" id="1_ia1lp"]
+[ext_resource type="PackedScene" uid="uid://cbkli1t1cxykq" path="res://entities/non-living/test_object.tscn" id="2_sasra"]
+
+[node name="Node2D" type="Node2D"]
+y_sort_enabled = true
+scale = Vector2(1.03305, 1.12797)
+
+[node name="Player" parent="." instance=ExtResource("1_ia1lp")]
+
+[node name="test_object" parent="." instance=ExtResource("2_sasra")]
+position = Vector2(428, 281)
