@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://c3m1lbtdonhb4"]
+
+[ext_resource type="Texture2D" uid="uid://bsg844tqtcif7" path="res://circle.png" id="1_fpni7"]
+[ext_resource type="Script" uid="uid://blrpd4cfbag78" path="res://components/entity_gravity.gd" id="1_gq8oa"]
+
+[node name="Shadow" type="Sprite2D"]
+show_behind_parent = true
+z_index = -1
+y_sort_enabled = true
+texture = ExtResource("1_fpni7")
+script = ExtResource("1_gq8oa")

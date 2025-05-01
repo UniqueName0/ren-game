@@ -8,19 +8,21 @@ extends CharacterBody2D
 @export var stretch_speed := 50
 @export var throw_force := 300
 @export var throw_height := 400
+@export var jump_height := 500
 
 enum State { IDLE, STRETCHING, BLASTING }
 var current_state := State.IDLE
 var stretch_amount := 0.0
 var previous_offset := Vector2.ZERO
 var last_direction := Vector2.RIGHT
-var is_attacking
+
 var team = 1
 
 func _physics_process(delta: float):
 	var direction := Input.get_vector("left", "right", "up", "down")
 	var stretch_pressed := Input.is_action_pressed("stretch")
 	var throw_pressed := Input.is_action_pressed("throw")
+	var jump_pressed := Input.is_action_just_pressed("jump")
 	var stretch_change := 0.0
 	
 	if not direction.is_zero_approx():
@@ -35,13 +37,16 @@ func _physics_process(delta: float):
 				current_state = State.STRETCHING
 				velocity = Vector2.ZERO
 				stretch_change = delta * stretch_speed
-			if throw_pressed and $CarriedItemsContainer.get_child_count() > 0:
-				var item = $CarriedItemsContainer.get_child(0)
-				item.reparent(get_tree().root, false)
-				item.global_position = $CarriedItemsContainer.global_position
+			if throw_pressed and $EntityDetectionArea/CarriedItemsContainer.get_child_count() > 0:
+				var item = $EntityDetectionArea/CarriedItemsContainer.get_child(0)
+				item.call_deferred("reparent", get_tree().root, true)
+				item.global_position = $Shadow.global_position
+				item.get_node("Shadow").z_position = $Shadow.z_position - $EntityDetectionArea/CarriedItemsContainer.position.y
 				item.z_index = 0
-				item.throw(last_direction * throw_force, throw_height, self)
-			is_attacking = false
+				
+				item.get_node("Shadow").throw(last_direction * throw_force, throw_height, self)
+			if jump_pressed and not $Shadow.visible:
+				$Shadow.z_velocity = -jump_height
 		State.STRETCHING:
 			if stretch_pressed:
 				stretch_change = (delta * stretch_speed) if not direction.is_zero_approx() else (-delta * stretch_speed)
@@ -55,7 +60,6 @@ func _physics_process(delta: float):
 			if velocity.length() < blast_stop_threshold:
 				current_state = State.IDLE
 				velocity = Vector2.ZERO
-			is_attacking = true
 	
 	
 	stretch_amount = clampf(stretch_amount + stretch_change, 0, max_stretch)

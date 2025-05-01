@@ -1,27 +1,28 @@
 [gd_scene load_steps=5 format=3 uid="uid://cbkli1t1cxykq"]
 
 [ext_resource type="Script" uid="uid://csujdj5o3kgeg" path="res://test_object.gd" id="1_dvq88"]
-[ext_resource type="Texture2D" uid="uid://bsg844tqtcif7" path="res://circle.png" id="2_xrin1"]
+[ext_resource type="PackedScene" uid="uid://c3m1lbtdonhb4" path="res://components/EntityGravity.tscn" id="3_dvq88"]
 [ext_resource type="Texture2D" uid="uid://c7p5de7go44u1" path="res://icon.svg" id="3_vnqi8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dvq88"]
 size = Vector2(38, 38)
 
-[node name="test_object" type="Area2D" groups=["Entity", "can_attack"]]
+[node name="test_object" type="Area2D" groups=["Area", "Entity", "can_attack"]]
 y_sort_enabled = true
 linear_damp = 5.0
 angular_damp = 5.0
 script = ExtResource("1_dvq88")
 
-[node name="Shadow" type="Sprite2D" parent="."]
-z_index = -1
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("2_xrin1")
+[node name="Shadow" parent="." node_paths=PackedStringArray("Actor", "AffectedObjects") instance=ExtResource("3_dvq88")]
+position = Vector2(4.76837e-07, -5.06639e-07)
+scale = Vector2(0.59375, 0.59375)
+Actor = NodePath("..")
+AffectedObjects = [NodePath("../CollisionBox"), NodePath("../Sprite2D")]
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_dvq88")
 
-[node name="Sprite2D" type="Sprite2D" parent="CollisionBox"]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("3_vnqi8")
 

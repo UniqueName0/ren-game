@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://4pyjl6kdauhp"]
+[gd_scene load_steps=6 format=3 uid="uid://4pyjl6kdauhp"]
 
 [ext_resource type="Script" uid="uid://cithjiy3kulp" path="res://player.gd" id="1_c1x3l"]
 [ext_resource type="Texture2D" uid="uid://c7p5de7go44u1" path="res://icon.svg" id="2_kb0hi"]
+[ext_resource type="PackedScene" uid="uid://c3m1lbtdonhb4" path="res://components/EntityGravity.tscn" id="3_kb0hi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sasra"]
 size = Vector2(64, 64)
@@ -12,6 +13,10 @@ size = Vector2(64, 64)
 [node name="Player" type="CharacterBody2D" groups=["Entity", "can_attack", "item_land_on_head"]]
 y_sort_enabled = true
 script = ExtResource("1_c1x3l")
+
+[node name="Shadow" parent="." node_paths=PackedStringArray("Actor", "AffectedObjects") instance=ExtResource("3_kb0hi")]
+Actor = NodePath("..")
+AffectedObjects = [NodePath("../CollisionBox"), NodePath("../EntityDetectionArea")]
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_sasra")
@@ -25,7 +30,7 @@ texture = ExtResource("2_kb0hi")
 [node name="CollisionBox" type="CollisionShape2D" parent="EntityDetectionArea"]
 shape = SubResource("RectangleShape2D_c1x3l")
 
-[node name="CarriedItemsContainer" type="Node2D" parent="."]
-position = Vector2(0, -41)
+[node name="CarriedItemsContainer" type="Node2D" parent="EntityDetectionArea"]
+position = Vector2(0, -40)
 
 [connection signal="area_entered" from="EntityDetectionArea" to="." method="_on_entity_detection_area_area_entered"]
