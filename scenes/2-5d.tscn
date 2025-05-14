@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3 uid="uid://cg8ilqokj6a3c"]
+
+[ext_resource type="Texture2D" uid="uid://c7p5de7go44u1" path="res://icon.svg" id="1_5ayu5"]
+[ext_resource type="Script" uid="uid://d3mkrwicciv4l" path="res://player_2-5d.gd" id="2_a3gfr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a3gfr"]
+size = Vector3(1, 1.28568, 0.125549)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_a3gfr"]
+emission_shape_scale = Vector3(0.5, 0.5, 0.5)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.05
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+emission_ring_cone_angle = 90.0
+gravity = Vector3(0, 0, 0)
+color = Color(0.147032, 0.1622, 0.133626, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_a3gfr"]
+radius = 0.1
+height = 0.05
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.844618, 0.28218, -0.454968, 2.03426e-08, 0.849819, 0.527074, 0.53537, -0.445176, 0.717772, -6.34658, 4.41727, 6.47243)
+shadow_enabled = true
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("2_a3gfr")
+
+[node name="Sprite3D" type="Sprite3D" parent="Player"]
+billboard = 1
+shaded = true
+alpha_cut = 2
+texture = ExtResource("1_5ayu5")
+
+[node name="CollisionBox" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00370789, -0.0169983)
+shape = SubResource("BoxShape3D_a3gfr")
+
+[node name="Trail" type="GPUParticles3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.596853, 0)
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_a3gfr")
+draw_pass_1 = SubResource("SphereMesh_a3gfr")
+
+[node name="TrailTimer" type="Timer" parent="Player"]
+
+[node name="DetonationCooldown" type="Timer" parent="Player"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+gi_mode = 2
+use_collision = true
+size = Vector3(15, 0.1, 15)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.930027, 0.367492, 0, -0.367492, 0.930027, 0, 2.86299, 5.91922)
+
+[connection signal="timeout" from="Player/DetonationCooldown" to="Player" method="_on_detonation_cooldown_timeout"]
